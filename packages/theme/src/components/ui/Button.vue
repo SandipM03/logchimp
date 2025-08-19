@@ -36,6 +36,7 @@ const props = defineProps({
 	},
 	type: {
 		type: String,
+    default: 'primary',
 		required: true
 	},
 	size: {
@@ -63,11 +64,14 @@ const props = defineProps({
 
 const emit = defineEmits(['click'])
 
-function click() {
-	if (props.loading) return;
-	if (props.disabled) return;
-	emit("click");
-}
+function click(event: MouseEvent) {
+  if (props.loading || props.disabled) {
+    event.preventDefault();
+    return;
+  }
+  emit("click", event);
+  }
+
 </script>
 
 <style lang='sass'>

@@ -1,6 +1,11 @@
 #!/bin/bash
 
-# Create config file with correct settings
+# Try to create the database with the correct credentials
+psql -h localhost -U lc -c "CREATE DATABASE db" -W << EOF
+password
+EOF
+
+# Generate the configuration file with matching credentials
 PG_DATABASE="db" \
 PG_HOST="localhost" \
 PG_USER="lc" \
@@ -10,7 +15,6 @@ THEME_STANDALONE="true" \
 SECRET_KEY="privateSecretKey" \
 MAIL_SERVICE="maildev" \
 MAIL_HOST="localhost" \
-MAIL_USER="lc" \
+MAIL_USER="node" \
 MAIL_PORT=1025 \
-MAIL_FROM="hello@logchimp.codecarrot.net" \
 sh ./scripts/create-config.sh

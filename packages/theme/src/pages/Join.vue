@@ -118,9 +118,9 @@ async function join() {
 
 	try {
 		const response = await signup({
-      email: email.value,
-      password: password.value
-    });
+			email: email.value,
+			password: password.value
+		});
 
 		login(response.data.user);
 		const permissions = await getPermissions();
@@ -133,18 +133,24 @@ async function join() {
 			router.push("/");
 		}
 	} catch (error: any) {
-		if (error.response.data.code === "MAIL_CONFIG_MISSING") {
-			serverError.value = true;
-		}
+		if (error.response) {
+			if (error.response.data.code === "MAIL_CONFIG_MISSING") {
+				serverError.value = true;
+			}
 
-    if (error.response.data.code === "EMAIL_INVALID") {
-      emailError.show = true;
-      emailError.message = "Invalid email";
-		}
-
-		if (error.response.data.code === "USER_EXISTS") {
+			if (error.response.data.code === "EMAIL_INVALID") {
 			emailError.show = true;
-			emailError.message = "Exists";
+			emailError.message = "Invalid email";
+			}
+
+			if (error.response.data.code === "USER_EXISTS") {
+				emailError.show = true;
+				emailError.message = "Exists";
+			}
+		} else {
+			// Handle any other unexpected errors
+			console.error("An unexpected error occurred:", error);
+			serverError.value = true;
 		}
 	} finally {
 		buttonLoading.value = false;
